@@ -12,30 +12,30 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.codingChallenge.model.CityWeather;
 
+import okhttp3.Response;
+
 @SpringBootApplication
 @RestController
 public class WeatherApiApplication{
 
 	@Autowired
-	private WeatherService wService = new WeatherService();
+	private WeatherService wService;
 
 	@GetMapping("/weather")
-	public boolean GetCityWeather(@RequestParam String city){
-		CityWeather weatherSaved = null;
-		boolean success = false;
+	public void GetCityWeather(@RequestParam String city){
 		try {
-			weatherSaved = this.wService.save(wService.GetCityWeather(city));
-			if(weatherSaved != null){
-				success= true;
+			
+			Boolean saved = this.wService.save(wService.GetCityWeather(city));
+
+			if(saved){
+				System.out.println("Weather from " + city + " saved in mongoDB");
+			}else{
+				System.out.println("Weather from " + city + " not saved in mongoDB");
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(weatherSaved == null){
-			success = false;
-		}
-		return success;
 	}
 
 	public static void main(String[] args) throws IOException {
